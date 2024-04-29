@@ -20,7 +20,11 @@ import com.api.project.exceptions.IdNotFoundException;
 import com.api.project.exceptions.CarroDuplicadoException;
 import com.api.project.model.Carro;
 import com.api.project.services.CarroService;
+import com.fasterxml.jackson.annotation.JacksonInject.Value;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
 
 @RestController
@@ -39,6 +43,9 @@ public class CarroController {
 		return carroService.getCarros();
 	}
 
+	@Operation(description = "busca o carro por id")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "retorna o carro"),
+			@ApiResponse(responseCode = "404", description = "não existe carro com o id informado") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Carro> getCarroById(@PathVariable("id") Long id) {
 		try {
@@ -50,6 +57,9 @@ public class CarroController {
 
 	}
 
+	@Operation(description = "cadastra carro")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "carro cadastrado"),
+			@ApiResponse(responseCode = "422", description = "Erro validação ou carro duplicado") })
 	@PostMapping
 	public ResponseEntity<Carro> cadastrarCarro(@RequestBody Carro carro) {
 
@@ -65,6 +75,10 @@ public class CarroController {
 
 	}
 
+	@Operation(description = "Atualiza carro")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "atualiza carro"),
+			@ApiResponse(responseCode = "404", description = "id não existe"),
+			@ApiResponse(responseCode = "422", description = "Erro de validação ou carro duplicado") })
 	@PutMapping("/{id}")
 	public ResponseEntity<Carro> updateCarro(@PathVariable Long id, @RequestBody Carro carro) {
 
@@ -81,6 +95,9 @@ public class CarroController {
 
 	}
 
+	@Operation(description = "Exclui carro ")
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Carro excluído "),
+			@ApiResponse(responseCode = "404", description = "Id não encontrado") })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteCaro(@PathVariable("id") Long id) {
 

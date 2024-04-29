@@ -21,6 +21,9 @@ import com.api.project.exceptions.MarcaDuplicadaException;
 import com.api.project.model.Marca;
 import com.api.project.services.MarcaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
 
 @RestController
@@ -39,6 +42,9 @@ public class MarcaController {
 		return marcaService.getMarcas();
 	}
 
+	@Operation(description = "marca por id")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Retorna a marca"),
+			@ApiResponse(responseCode = "400", description = "id nao existe") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Marca> getMarcaById(@PathVariable("id") Long id) {
 		try {
@@ -50,6 +56,9 @@ public class MarcaController {
 
 	}
 
+	@Operation(description = "Cadastra marca")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Marca cadastrada "),
+			@ApiResponse(responseCode = "422", description = "Erro de validação ou marca duplicada") })
 	@PostMapping
 	public ResponseEntity<Marca> cadastrarMarca(@RequestBody Marca marca) throws MarcaDuplicadaException {
 
@@ -66,6 +75,10 @@ public class MarcaController {
 
 	}
 
+	@Operation(description = "Atualiza uma marca")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Marca atualizada "),
+			@ApiResponse(responseCode = "400", description = "id nao existe"),
+			@ApiResponse(responseCode = "422", description = "Erro de validação") })
 	@PutMapping("/{id}")
 	public ResponseEntity<Marca> updateMarca(@PathVariable Long id, @RequestBody Marca marca) {
 
@@ -80,6 +93,9 @@ public class MarcaController {
 
 	}
 
+	@Operation(description = "Exclui uma marca existente")
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Marca excluída"),
+			@ApiResponse(responseCode = "400", description = "id não existe") })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteMarca(@PathVariable("id") Long id) {
 

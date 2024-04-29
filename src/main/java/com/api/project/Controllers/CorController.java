@@ -21,6 +21,9 @@ import com.api.project.exceptions.IdNotFoundException;
 import com.api.project.model.Cor;
 import com.api.project.services.CorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
 
 @RestController
@@ -39,6 +42,9 @@ public class CorController {
 		return corService.getCores();
 	}
 
+	@Operation(description = "cor por ID")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Retorna a cor"),
+			@ApiResponse(responseCode = "400", description = "id nao existe") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Cor> getCorById(@PathVariable("id") Long id) {
 		try {
@@ -50,6 +56,9 @@ public class CorController {
 
 	}
 
+	@Operation(description = "Cadastra cor")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Cor cadastrada "),
+			@ApiResponse(responseCode = "422", description = "Erro de validação ou cor duplicada") })
 	@PostMapping
 	public ResponseEntity<Cor> cadastrarCor(@RequestBody Cor cor) throws CorDuplicadaException {
 
@@ -65,6 +74,10 @@ public class CorController {
 
 	}
 
+	@Operation(description = "Atualiza uma cor ")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Cor atualizada "),
+			@ApiResponse(responseCode = "400", description = "id nao existe"),
+			@ApiResponse(responseCode = "422", description = "Erro de validação") })
 	@PutMapping("/{id}")
 	public ResponseEntity<Cor> updateCor(@PathVariable Long id, @RequestBody Cor cor) {
 
@@ -79,6 +92,9 @@ public class CorController {
 
 	}
 
+	@Operation(description = "Exclui uma cor ")
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Cor excluída"),
+			@ApiResponse(responseCode = "400", description = "id nao existe") })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteCor(@PathVariable("id") Long id) {
 		try {
